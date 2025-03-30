@@ -4,11 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chandler Manuel | Design Studio</title>
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-  <script>
-    // Initialize EmailJS with your API key
-    emailjs.init('wZhiGoCmnb1nKPB9E');
-  </script>
   <style>
     body {
       font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -99,10 +94,6 @@
       border-radius: 8px;
       margin-top: 20px;
     }
-    #email-backup {
-      display: none;
-      margin-top: 20px;
-    }
   </style>
 </head>
 <body>
@@ -124,12 +115,16 @@
       <p>You're on the right track! Just one step away from bringing your vision to life.</p>
       <p><strong>Let's do this!</strong></p>
       
-      <form id="project-form">
+      <!-- Changed to Formspree form -->
+      <form id="project-form" action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST">
+        <input type="hidden" name="_subject" value="New Project Inquiry">
+        <input type="hidden" name="_replyto" value="w.chandler.manuel@gmail.com">
+        
         <div class="input-group">
-          <input type="text" id="name" placeholder="Name" required>
+          <input type="text" name="name" placeholder="Name" required>
         </div>
         <div class="input-group">
-          <input type="email" id="email" placeholder="Email" required>
+          <input type="email" name="_replyto" placeholder="Email" required>
         </div>
         <button type="submit" id="submit-btn">Done!</button>
       </form>
@@ -142,15 +137,7 @@
       <div id="error-message">
         <h2>Oops!</h2>
         <p>There was an error sending your information.</p>
-        <p>Please try again or contact us directly.</p>
-      </div>
-      
-      <div id="email-backup">
-        <p>Or email directly:</p>
-        <a href="mailto:w.chandler.manuel@gmail.com?subject=Project%20Inquiry&body=Hi%20Chandler,%0D%0A%0D%0AMy%20name%20is%20[Your%20Name].%0D%0A%0D%0AI'm%20interested%20in%20[Project%20Details]%0D%0A%0D%0AContact%20me%20at%20[Your%20Email/Phone]" 
-           style="color:white; text-decoration:underline;">
-          w.chandler.manuel@gmail.com
-        </a>
+        <p>Please try again or contact us directly at w.chandler.manuel@gmail.com</p>
       </div>
       
       <p class="disclaimer">We respect your privacy. Your information will never be shared.</p>
@@ -164,41 +151,36 @@
       document.getElementById('form-container').style.display = 'block';
     });
 
-    // Handle form submission
-    document.getElementById('project-form').addEventListener('submit', function(e) {
+    // Handle form submission with Formspree
+    document.getElementById('project-form').addEventListener('submit', async function(e) {
       e.preventDefault();
       
       const btn = document.getElementById('submit-btn');
       btn.disabled = true;
       btn.textContent = 'Sending...';
       
-      emailjs.send('service_e655cq7', 'template_aiewnbp', {
-        to_name: document.getElementById('name').value,
-        to_email: document.getElementById('email').value,
-        from_name: 'Chandler Manuel',
-        reply_to: 'w.chandler.manuel@gmail.com'
-      })
-      .then(function() {
-        // Success
-        document.getElementById('project-form').style.display = 'none';
-        document.getElementById('success-message').style.display = 'block';
-        document.getElementById('error-message').style.display = 'none';
-        document.getElementById('email-backup').style.display = 'none';
-      })
-      .catch(function(error) {
-        // Error
-        console.error('EmailJS Error:', {
-          status: error.status,
-          text: error.text,
-          response: error.response
+      try {
+        const response = await fetch(e.target.action, {
+          method: 'POST',
+          body: new FormData(e.target),
+          headers: {
+            'Accept': 'application/json'
+          }
         });
+        
+        if (response.ok) {
+          document.getElementById('project-form').style.display = 'none';
+          document.getElementById('success-message').style.display = 'block';
+        } else {
+          throw new Error('Form submission failed');
+        }
+      } catch (error) {
+        console.error('Error:', error);
         document.getElementById('error-message').style.display = 'block';
-        document.getElementById('email-backup').style.display = 'block';
-      })
-      .finally(function() {
+      } finally {
         btn.disabled = false;
         btn.textContent = 'Done!';
-      });
+      }
     });
   </script>
 </body>
