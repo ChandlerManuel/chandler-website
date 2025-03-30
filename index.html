@@ -10,13 +10,9 @@
       font-family: 'Helvetica Neue', Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background: 
-        /* Light overlay (reduced opacity to 0.7 for better visibility) */
-        linear-gradient(rgba(245, 245, 245, 0.7), rgba(245, 245, 245, 0.7)),
-        /* Sample background image (replace with your own) */
-        url('background.png') center/cover no-repeat fixed;
+      background: url('background.png') center/cover no-repeat fixed;
       min-height: 100vh;
-      color: #333;
+      color: white; /* All text white */
     }
 
     .container {
@@ -26,13 +22,21 @@
       text-align: center;
     }
 
+    /* LOGO STYLING */
+    .logo {
+      width: 180px;
+      margin-bottom: 30px;
+      filter: brightness(0) invert(1); /* Makes logo white */
+    }
+
     /* TYPOGRAPHY */
     h1 {
       font-size: 2.8rem;
       font-weight: 700;
       letter-spacing: 0.5px;
       margin: 20px 0;
-      color: #000;
+      color: white;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
     }
 
     h2 {
@@ -40,19 +44,22 @@
       font-weight: 400;
       margin-bottom: 30px;
       line-height: 1.4;
+      color: white;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
     }
 
     p {
       font-size: 1.1rem;
       margin-bottom: 25px;
+      color: white;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
     }
 
     /* FORM ELEMENTS */
     .form-container {
-      background: white;
+      background: rgba(0,0,0,0.7); /* Semi-transparent dark background */
       padding: 50px;
       border-radius: 8px;
-      box-shadow: 0 5px 25px rgba(0,0,0,0.1);
       display: none; /* Hidden initially */
     }
 
@@ -65,32 +72,51 @@
       width: 100%;
       padding: 12px 0;
       border: none;
-      border-bottom: 1px solid #ddd;
+      border-bottom: 1px solid white;
       font-size: 1rem;
+      background: transparent;
+      color: white;
+    }
+
+    input::placeholder {
+      color: rgba(255,255,255,0.7);
     }
 
     button {
-      background: #000;
-      color: #fff;
+      background: white;
+      color: black;
       border: none;
       padding: 15px 40px;
       font-size: 1rem;
       margin: 20px 0;
       cursor: pointer;
       transition: all 0.3s;
+      font-weight: 600;
+    }
+
+    button:hover {
+      background: #f0f0f0;
     }
 
     /* VISUAL DETAILS */
     .divider {
       height: 1px;
       width: 100px;
-      background: #ddd;
+      background: rgba(255,255,255,0.3);
       margin: 40px auto;
+    }
+
+    .disclaimer {
+      color: rgba(255,255,255,0.7);
+      font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
   <div class="container">
+    <!-- Logo -->
+    <img src="logo.png" alt="Chandler Manuel Logo" class="logo">
+
     <!-- Landing Content -->
     <div id="landing">
       <h1>CHANDLER MANUEL</h1>
