@@ -115,24 +115,25 @@
       <p>You're on the right track! Just one step away from bringing your vision to life.</p>
       <p><strong>Let's do this!</strong></p>
       
-      <!-- FormSubmit Form -->
+      <!-- FormSubmit Form with Auto-Reply -->
       <form id="project-form" action="https://formsubmit.co/w.chandler.manuel@gmail.com" method="POST">
-        <input type="hidden" name="_subject" value="New Project Inquiry">
-        <input type="hidden" name="_captcha" value="false"> <!-- Disable CAPTCHA -->
-        <input type="hidden" name="_template" value="table"> <!-- Better email formatting -->
+        <input type="hidden" name="_subject" value="New Project Inquiry - Chandler Manuel">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_autoresponse" value="Hi %name%, thank you for contacting Chandler Manuel Design Studio! We've received your project inquiry and will respond within 24 hours.">
         
         <div class="input-group">
-          <input type="text" name="name" placeholder="Name" required>
+          <input type="text" name="name" placeholder="Your Name" required>
         </div>
         <div class="input-group">
-          <input type="email" name="email" placeholder="Email" required> <!-- FormSubmit uses "email" (not "_replyto") -->
+          <input type="email" name="email" placeholder="Your Email" required>
         </div>
-        <button type="submit" id="submit-btn">Done!</button>
+        <button type="submit" id="submit-btn">SUBMIT PROJECT REQUEST</button>
       </form>
       
       <div id="success-message">
         <h2>Thank You!</h2>
-        <p>We've sent a confirmation to your email.</p>
+        <p>We've received your submission and sent a confirmation to your email.</p>
       </div>
       
       <div id="error-message">
@@ -152,13 +153,13 @@
       document.getElementById('form-container').style.display = 'block';
     });
 
-    // Handle form submission (works with FormSubmit)
+    // Handle form submission
     document.getElementById('project-form').addEventListener('submit', async function(e) {
       e.preventDefault();
       
       const btn = document.getElementById('submit-btn');
       btn.disabled = true;
-      btn.textContent = 'Sending...';
+      btn.textContent = 'SENDING...';
       
       try {
         const response = await fetch(e.target.action, {
@@ -180,7 +181,7 @@
         document.getElementById('error-message').style.display = 'block';
       } finally {
         btn.disabled = false;
-        btn.textContent = 'Done!';
+        btn.textContent = 'SUBMIT PROJECT REQUEST';
       }
     });
   </script>
