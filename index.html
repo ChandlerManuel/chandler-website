@@ -12,7 +12,7 @@
       padding: 0;
       background: url('background.png') center/cover no-repeat fixed;
       min-height: 100vh;
-      color: white; /* All text white */
+      color: white;
     }
 
     .container {
@@ -26,12 +26,12 @@
     .logo {
       width: 180px;
       margin-bottom: 30px;
-      filter: brightness(0) invert(1); /* Makes logo white */
+      filter: brightness(0) invert(1);
     }
 
-    /* TYPOGRAPHY */
+    /* TYPOGRAPHY - SWAPPED FONT SIZES */
     h1 {
-      font-size: 2.8rem;
+      font-size: 1.8rem; /* Smaller size (previously h2 size) */
       font-weight: 700;
       letter-spacing: 0.5px;
       margin: 20px 0;
@@ -40,7 +40,7 @@
     }
 
     h2 {
-      font-size: 1.8rem;
+      font-size: 2.8rem; /* Larger size (previously h1 size) */
       font-weight: 400;
       margin-bottom: 30px;
       line-height: 1.4;
@@ -57,10 +57,10 @@
 
     /* FORM ELEMENTS */
     .form-container {
-      background: rgba(0,0,0,0.7); /* Semi-transparent dark background */
+      background: rgba(0,0,0,0.7);
       padding: 50px;
       border-radius: 8px;
-      display: none; /* Hidden initially */
+      display: none;
     }
 
     .input-group {
@@ -98,7 +98,6 @@
       background: #f0f0f0;
     }
 
-    /* VISUAL DETAILS */
     .divider {
       height: 1px;
       width: 100px;
@@ -119,8 +118,8 @@
 
     <!-- Landing Content -->
     <div id="landing">
-      <h1>CHANDLER MANUEL</h1>
-      <h2>YOUR DREAM PROJECT<br>STARTS HERE!</h2>
+      <h1>CHANDLER MANUEL</h1> <!-- Now smaller -->
+      <h2>YOUR DREAM PROJECT<br>STARTS HERE!</h2> <!-- Now larger -->
       <p>I help you turn ideas into stunning designs.</p>
       <p>Let's build something incredible together!</p>
       <div class="divider"></div>
@@ -129,7 +128,8 @@
 
     <!-- Form Content -->
     <div id="form-container" class="form-container">
-      <h2>YOUR DREAM PROJECT STARTS HERE!</h2>
+      <h1>CHANDLER MANUEL</h1> <!-- Smaller in form too -->
+      <h2>YOUR DREAM PROJECT STARTS HERE!</h2> <!-- Larger in form too -->
       <p>You're on the right track! Just one step away from bringing your vision to life.</p>
       <p><strong>Let's do this!</strong></p>
       
