@@ -10,7 +10,6 @@
     emailjs.init('wZhiGoCmnb1nKPB9E');
   </script>
   <style>
-    /* YOUR PERFECTED STYLES */
     body {
       font-family: 'Helvetica Neue', Arial, sans-serif;
       margin: 0;
@@ -18,6 +17,7 @@
       background: url('background.png') center/cover no-repeat fixed;
       min-height: 100vh;
       color: white;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.8);
     }
     .container {
       max-width: 800px;
@@ -35,19 +35,16 @@
       font-weight: 400;
       letter-spacing: 0.5px;
       margin: 20px 0;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
     }
     h2 {
       font-size: 2.8rem;
       font-weight: 700;
       margin-bottom: 30px;
       line-height: 1.4;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
     }
     p {
       font-size: 1.1rem;
       margin-bottom: 25px;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.8);
     }
     .form-container {
       background: rgba(0,0,0,0.7);
@@ -94,13 +91,24 @@
       background: rgba(0,0,0,0.7);
       border-radius: 8px;
     }
+    #error-message {
+      display: none;
+      color: #ff6b6b;
+      padding: 20px;
+      background: rgba(0,0,0,0.7);
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+    #email-backup {
+      display: none;
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <img src="logo.png" alt="Chandler Manuel Logo" class="logo">
 
-    <!-- Your Original Landing Content -->
     <div id="landing">
       <h1>CHANDLER MANUEL</h1>
       <h2>YOUR DREAM PROJECT<br>STARTS HERE!</h2>
@@ -110,7 +118,6 @@
       <button id="cta-button">CLICK HERE TO GET STARTED</button>
     </div>
 
-    <!-- Form Section -->
     <div id="form-container" class="form-container">
       <h1>CHANDLER MANUEL</h1>
       <h2>YOUR DREAM PROJECT STARTS HERE!</h2>
@@ -131,17 +138,33 @@
         <h2>Thank You!</h2>
         <p>We've sent a confirmation to your email.</p>
       </div>
+      
+      <div id="error-message">
+        <h2>Oops!</h2>
+        <p>There was an error sending your information.</p>
+        <p>Please try again or contact us directly.</p>
+      </div>
+      
+      <div id="email-backup">
+        <p>Or email directly:</p>
+        <a href="mailto:w.chandler.manuel@gmail.com?subject=Project%20Inquiry&body=Hi%20Chandler,%0D%0A%0D%0AMy%20name%20is%20[Your%20Name].%0D%0A%0D%0AI'm%20interested%20in%20[Project%20Details]%0D%0A%0D%0AContact%20me%20at%20[Your%20Email/Phone]" 
+           style="color:white; text-decoration:underline;">
+          w.chandler.manuel@gmail.com
+        </a>
+      </div>
+      
+      <p class="disclaimer">We respect your privacy. Your information will never be shared.</p>
     </div>
   </div>
 
   <script>
-    // Toggle between landing and form
+    // Show form when button clicked
     document.getElementById('cta-button').addEventListener('click', function() {
       document.getElementById('landing').style.display = 'none';
       document.getElementById('form-container').style.display = 'block';
     });
 
-    // Form submission with NEW template_aiewnbp
+    // Handle form submission
     document.getElementById('project-form').addEventListener('submit', function(e) {
       e.preventDefault();
       
@@ -159,10 +182,18 @@
         // Success
         document.getElementById('project-form').style.display = 'none';
         document.getElementById('success-message').style.display = 'block';
-      }, function(error) {
+        document.getElementById('error-message').style.display = 'none';
+        document.getElementById('email-backup').style.display = 'none';
+      })
+      .catch(function(error) {
         // Error
-        alert('Oops! Please email me directly at w.chandler.manuel@gmail.com');
-        console.error('EmailJS Error:', error);
+        console.error('EmailJS Error:', {
+          status: error.status,
+          text: error.text,
+          response: error.response
+        });
+        document.getElementById('error-message').style.display = 'block';
+        document.getElementById('email-backup').style.display = 'block';
       })
       .finally(function() {
         btn.disabled = false;
