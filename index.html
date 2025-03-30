@@ -31,19 +31,31 @@
     h1 {
       font-size: 1.8rem;
       font-weight: 400;
+      letter-spacing: 0.5px;
       margin: 20px 0;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
     }
     h2 {
       font-size: 2.8rem;
       font-weight: 700;
       margin-bottom: 30px;
       line-height: 1.4;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 25px;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.8);
     }
     .form-container {
       background: rgba(0,0,0,0.7);
       padding: 50px;
       border-radius: 8px;
       display: none;
+    }
+    .input-group {
+      margin-bottom: 25px;
+      text-align: left;
     }
     input {
       width: 100%;
@@ -52,14 +64,23 @@
       border-bottom: 1px solid white;
       background: transparent;
       color: white;
+      font-size: 1rem;
     }
     button {
       background: white;
       color: black;
-      padding: 15px 40px;
       border: none;
+      padding: 15px 40px;
+      font-size: 1rem;
       margin: 20px 0;
       cursor: pointer;
+      font-weight: 600;
+    }
+    .divider {
+      height: 1px;
+      width: 100px;
+      background: rgba(255,255,255,0.5);
+      margin: 40px auto;
     }
     #success-message {
       display: none;
@@ -71,20 +92,30 @@
 </head>
 <body>
   <div class="container">
-    <img src="logo.png" alt="Logo" class="logo">
-    
+    <img src="logo.png" alt="Chandler Manuel Logo" class="logo">
+
+    <!-- Landing Content (WITH ALL ORIGINAL MESSAGES RESTORED) -->
     <div id="landing">
       <h1>CHANDLER MANUEL</h1>
       <h2>YOUR DREAM PROJECT<br>STARTS HERE!</h2>
+      <p>I help you turn ideas into stunning designs.</p>
+      <p>Let's build something incredible together!</p>
+      <div class="divider"></div>
       <button id="cta-button">CLICK HERE TO GET STARTED</button>
     </div>
 
+    <!-- Form Content -->
     <div id="form-container" class="form-container">
+      <h1>CHANDLER MANUEL</h1>
+      <h2>YOUR DREAM PROJECT STARTS HERE!</h2>
+      <p>You're on the right track! Just one step away from bringing your vision to life.</p>
+      <p><strong>Let's do this!</strong></p>
+      
       <form id="project-form">
-        <div>
+        <div class="input-group">
           <input type="text" id="name" placeholder="Name" required>
         </div>
-        <div>
+        <div class="input-group">
           <input type="email" id="email" placeholder="Email" required>
         </div>
         <button type="submit" id="submit-btn">Done!</button>
@@ -92,17 +123,19 @@
       
       <div id="success-message">
         <h2>Thank You, <span id="success-name"></span>!</h2>
-        <p>We've sent a confirmation to your email.</p>
+        <p>We've sent a confirmation email with next steps.</p>
       </div>
     </div>
   </div>
 
   <script>
+    // Show form when button clicked
     document.getElementById('cta-button').addEventListener('click', function() {
       document.getElementById('landing').style.display = 'none';
       document.getElementById('form-container').style.display = 'block';
     });
 
+    // Handle form submission (USER-ONLY EMAIL)
     document.getElementById('project-form').addEventListener('submit', async function(e) {
       e.preventDefault();
       
@@ -110,19 +143,22 @@
       btn.disabled = true;
       btn.textContent = 'Sending...';
       
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      
       try {
         await emailjs.send('service_e655cq7', 'template_tumomcd', {
-          to_name: document.getElementById('name').value,
-          to_email: document.getElementById('email').value,
+          to_name: name,
+          to_email: email,
           from_name: 'Chandler Manuel',
           reply_to: 'w.chandler.manuel@gmail.com'
         });
 
-        document.getElementById('success-name').textContent = document.getElementById('name').value;
+        document.getElementById('success-name').textContent = name;
         document.getElementById('project-form').style.display = 'none';
         document.getElementById('success-message').style.display = 'block';
       } catch (error) {
-        alert('Error sending email. Please try again later.');
+        alert('Error sending confirmation. Please contact us directly at w.chandler.manuel@gmail.com');
       } finally {
         btn.disabled = false;
         btn.textContent = 'Done!';
