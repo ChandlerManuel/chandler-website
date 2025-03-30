@@ -10,109 +10,167 @@
       margin: 0;
       padding: 0;
       background: url('background.png') center/cover no-repeat fixed;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       min-height: 100vh;
       color: white;
       text-shadow: 0 1px 3px rgba(0,0,0,0.8);
     }
     .container {
       max-width: 800px;
-      width: 90%;
+      margin: 0 auto;
+      padding: 60px 30px;
       text-align: center;
     }
     .logo {
       width: 180px;
       margin-bottom: 30px;
+      filter: brightness(0) invert(1);
     }
-    h1, h2, p {
-      margin-bottom: 20px;
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 400;
+      letter-spacing: 0.5px;
+      margin: 20px 0;
+    }
+    h2 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      margin-bottom: 30px;
+      line-height: 1.4;
+    }
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 25px;
     }
     .form-container {
       background: rgba(0,0,0,0.7);
-      padding: 30px;
+      padding: 50px;
       border-radius: 8px;
-      display: none;
+    }
+    .input-group {
+      margin-bottom: 25px;
+      text-align: left;
     }
     input {
       width: 100%;
       padding: 12px;
-      margin-bottom: 15px;
-      border: 1px solid white;
+      border: none;
+      border-bottom: 1px solid white;
       background: transparent;
       color: white;
+      font-size: 1rem;
     }
     button {
       background: white;
       color: black;
-      padding: 10px 20px;
       border: none;
+      padding: 15px 40px;
+      font-size: 1rem;
+      margin: 20px 0;
       cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    button:hover {
+      background: #f0f0f0;
+    }
+    .divider {
+      height: 1px;
+      width: 100px;
+      background: rgba(255,255,255,0.5);
+      margin: 40px auto;
     }
     #success-message, #error-message {
       display: none;
       padding: 20px;
+      background: rgba(0,0,0,0.7);
       border-radius: 8px;
       margin-top: 20px;
     }
-    #success-message {
-      background: green;
-    }
     #error-message {
-      background: red;
+      color: #ff6b6b;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <img src="logo.png" alt="Chandler Manuel Logo" class="logo">
+
     <div id="landing">
       <h1>CHANDLER MANUEL</h1>
-      <h2>YOUR DREAM PROJECT STARTS HERE!</h2>
+      <h2>YOUR DREAM PROJECT<br>STARTS HERE!</h2>
+      <p>I help you turn ideas into stunning designs.</p>
+      <p>Let's build something incredible together!</p>
+      <div class="divider"></div>
       <button id="cta-button">CLICK HERE TO GET STARTED</button>
     </div>
-    <div id="form-container" class="form-container">
-      <h2>Get Started</h2>
-      <form id="project-form" action="https://formsubmit.co/w.chandler.manuel@gmail.com" method="POST">
-        <input type="hidden" name="_subject" value="New Project Inquiry!">
-        <input type="hidden" name="_next" value="thank-you.html">
-        <input type="text" name="name" placeholder="Your Name" required>
-        <input type="email" name="email" placeholder="Your Email" required>
-        <button type="submit" id="submit-btn">SUBMIT</button>
+
+    <div id="form-container" class="form-container" style="display: none;">
+      <h1>CHANDLER MANUEL</h1>
+      <h2>YOUR DREAM PROJECT STARTS HERE!</h2>
+      <p>You're on the right track! Just one step away from bringing your vision to life.</p>
+      <p><strong>Let's do this!</strong></p>
+      
+      <form id="project-form">
+        <div class="input-group">
+          <input type="text" id="name" name="name" placeholder="Your Name" required>
+        </div>
+        <div class="input-group">
+          <input type="email" id="email" name="email" placeholder="Your Email" required>
+        </div>
+        <button type="submit" id="submit-btn">SUBMIT REQUEST</button>
       </form>
-      <div id="success-message">Thank you! Check your email for confirmation.</div>
-      <div id="error-message">Error sending your information. Try again.</div>
+      
+      <div id="success-message">
+        <h2>Thank You!</h2>
+        <p>We've received your submission. Check your email for confirmation.</p>
+      </div>
+      
+      <div id="error-message">
+        <h2>Oops!</h2>
+        <p>There was an error sending your information.</p>
+        <p>Please try again or contact us directly.</p>
+      </div>
+      
+      <p class="disclaimer">We respect your privacy. Your information will never be shared.</p>
     </div>
   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+      emailjs.init("wZhiGoCmnb1nKPB9E"); // Your Public Key
+
       document.getElementById('cta-button').addEventListener('click', function() {
         document.getElementById('landing').style.display = 'none';
         document.getElementById('form-container').style.display = 'block';
       });
+
       document.getElementById('project-form').addEventListener('submit', function(e) {
         e.preventDefault();
-        const btn = document.getElementById('submit-btn');
-        btn.disabled = true;
-        btn.textContent = 'SENDING...';
-        fetch(this.action, {
-          method: 'POST',
-          body: new FormData(this),
-          headers: { 'Accept': 'application/json' }
-        }).then(response => {
-          if (response.ok) {
+
+        const submitBtn = document.getElementById('submit-btn');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'SENDING...';
+
+        const templateParams = {
+          user_name: document.getElementById('name').value,
+          user_email: document.getElementById('email').value
+        };
+
+        emailjs.send("service_e655cq7", "template_aiewnbp", templateParams)
+          .then(response => {
+            console.log('Email sent:', response);
+            document.getElementById('project-form').style.display = 'none';
             document.getElementById('success-message').style.display = 'block';
-            document.getElementById('project-form').reset();
-          } else {
+          })
+          .catch(error => {
+            console.error('EmailJS error:', error);
             document.getElementById('error-message').style.display = 'block';
-          }
-        }).catch(() => {
-          document.getElementById('error-message').style.display = 'block';
-        }).finally(() => {
-          btn.disabled = false;
-          btn.textContent = 'SUBMIT';
-        });
+          })
+          .finally(() => {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'SUBMIT REQUEST';
+          });
       });
     });
   </script>
