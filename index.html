@@ -5,180 +5,86 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chandler Manuel | Design Studio</title>
   <style>
-    body {
-      font-family: 'Helvetica Neue', Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: url('background.png') center/cover no-repeat fixed;
-      min-height: 100vh;
-      color: white;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.8);
-    }
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 60px 30px;
-      text-align: center;
-    }
-    .logo {
-      width: 180px;
-      margin-bottom: 30px;
-      filter: brightness(0) invert(1);
-    }
-    h1 {
-      font-size: 1.8rem;
-      font-weight: 400;
-      letter-spacing: 0.5px;
-      margin: 20px 0;
-    }
-    h2 {
-      font-size: 2.8rem;
-      font-weight: 700;
-      margin-bottom: 30px;
-      line-height: 1.4;
-    }
-    p {
-      font-size: 1.1rem;
-      margin-bottom: 25px;
-    }
-    .form-container {
-      background: rgba(0,0,0,0.7);
-      padding: 50px;
-      border-radius: 8px;
-      display: none;
-    }
-    .input-group {
-      margin-bottom: 25px;
-      text-align: left;
-    }
-    input {
-      width: 100%;
-      padding: 12px 0;
-      border: none;
-      border-bottom: 1px solid white;
-      background: transparent;
-      color: white;
-      font-size: 1rem;
-    }
-    button {
-      background: white;
-      color: black;
-      border: none;
-      padding: 15px 40px;
-      font-size: 1rem;
-      margin: 20px 0;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.3s;
-    }
-    button:hover {
-      background: #f0f0f0;
-    }
-    .divider {
-      height: 1px;
-      width: 100px;
-      background: rgba(255,255,255,0.5);
-      margin: 40px auto;
-    }
-    #success-message {
-      display: none;
-      padding: 20px;
-      background: rgba(0,0,0,0.7);
-      border-radius: 8px;
-    }
-    #error-message {
-      display: none;
-      color: #ff6b6b;
-      padding: 20px;
-      background: rgba(0,0,0,0.7);
-      border-radius: 8px;
-      margin-top: 20px;
-    }
+    /* [Your existing CSS remains unchanged] */
   </style>
 </head>
 <body>
   <div class="container">
-    <img src="logo.png" alt="Chandler Manuel Logo" class="logo">
-
-    <div id="landing">
-      <h1>CHANDLER MANUEL</h1>
-      <h2>YOUR DREAM PROJECT<br>STARTS HERE!</h2>
-      <p>I help you turn ideas into stunning designs.</p>
-      <p>Let's build something incredible together!</p>
-      <div class="divider"></div>
-      <button id="cta-button">CLICK HERE TO GET STARTED</button>
-    </div>
+    <!-- [Your existing HTML structure remains unchanged until the form] -->
 
     <div id="form-container" class="form-container">
-      <h1>CHANDLER MANUEL</h1>
-      <h2>YOUR DREAM PROJECT STARTS HERE!</h2>
-      <p>You're on the right track! Just one step away from bringing your vision to life.</p>
-      <p><strong>Let's do this!</strong></p>
-      
-      <form id="project-form" action="https://formsubmit.co/w.chandler.manuel@gmail.com" method="POST">
-        <input type="hidden" name="_subject" value="New Project Inquiry">
-        <input type="hidden" name="_captcha" value="false">
+      <!-- SUPERCHARGED FORMSUBMIT FORM -->
+      <form id="project-form" action="https://formsubmit.co/ajax/w.chandler.manuel@gmail.com" method="POST">
+        <!-- Required Fields -->
+        <input type="hidden" name="_subject" value="New Project Inquiry - Chandler Manuel">
         <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_autoresponse" value="Hi %name%, thank you for contacting Chandler Manuel Design Studio! We'll respond within 24 hours.">
         
+        <!-- Auto-Reply Configuration (MUST use 'email' field name) -->
+        <input type="hidden" name="_autoresponse" value="Hi %name%, this confirms we received your request! We'll contact you within 24 hours.%0D%0A%0D%0AFor reference:%0D%0AName: %name%%0D%0AEmail: %email%">
+        <input type="hidden" name="_replyto" value="%email%"> <!-- Ensures reply-to is set -->
+        <input type="hidden" name="_cc" value="w.chandler.manuel@gmail.com"> <!-- Copy sent to you -->
+        
+        <!-- Debugging Tools -->
+        <input type="hidden" name="_captcha" value="false"> <!-- Disable if testing -->
+        <input type="hidden" name="_blacklist" value="spamtrigger"> <!-- Filter spam -->
+        
+        <!-- User Input Fields -->
         <div class="input-group">
           <input type="text" name="name" placeholder="Your Name" required>
         </div>
         <div class="input-group">
-          <input type="email" name="email" placeholder="Your Email" required>
+          <input type="email" name="email" placeholder="Your Email" required> <!-- MUST be 'email' -->
         </div>
+        
         <button type="submit" id="submit-btn">SUBMIT REQUEST</button>
       </form>
       
-      <div id="success-message">
-        <h2>Thank You!</h2>
-        <p>We've received your submission and sent a confirmation to your email.</p>
-      </div>
-      
-      <div id="error-message">
-        <h2>Oops!</h2>
-        <p>There was an error sending your information.</p>
-        <p>Please try again or contact us directly at w.chandler.manuel@gmail.com</p>
-      </div>
-      
-      <p class="disclaimer">We respect your privacy. Your information will never be shared.</p>
+      <!-- [Your existing success/error messages remain] -->
     </div>
   </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // Show form when button clicked
-      document.getElementById('cta-button').addEventListener('click', function() {
-        document.getElementById('landing').style.display = 'none';
-        document.getElementById('form-container').style.display = 'block';
-      });
-
-      // Handle form submission
-      document.getElementById('project-form').addEventListener('submit', function(e) {
+      const form = document.getElementById('project-form');
+      
+      form.addEventListener('submit', function(e) {
         e.preventDefault();
-        
         const btn = document.getElementById('submit-btn');
         btn.disabled = true;
         btn.textContent = 'SENDING...';
         
-        fetch(e.target.action, {
+        // Enhanced submission with error tracking
+        fetch(form.action, {
           method: 'POST',
-          body: new FormData(e.target),
-          headers: {
-            'Accept': 'application/json'
+          body: new FormData(form),
+          headers: { 
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest' // Required for FormSubmit API
           }
         })
         .then(response => {
-          if (response.ok) {
+          if (!response.ok) throw new Error('Server error');
+          return response.json();
+        })
+        .then(data => {
+          if (data.success) {
             document.getElementById('project-form').style.display = 'none';
             document.getElementById('success-message').style.display = 'block';
+            
+            // DEBUG: Log successful delivery
+            console.log('Auto-reply sent to:', data.email);
           } else {
-            throw new Error('Form submission failed');
+            throw new Error(data.message || 'Delivery failed');
           }
         })
         .catch(error => {
-          console.error('Error:', error);
+          console.error('Submission error:', error);
           document.getElementById('error-message').style.display = 'block';
+          
+          // SPECIAL FALLBACK: If FormSubmit fails, use Mailto as backup
+          const name = encodeURIComponent(form.elements['name'].value);
+          const email = encodeURIComponent(form.elements['email'].value);
+          window.location.href = `mailto:w.chandler.manuel@gmail.com?subject=Project Inquiry&body=Name: ${name}%0AEmail: ${email}`;
         })
         .finally(() => {
           btn.disabled = false;
