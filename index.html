@@ -51,7 +51,7 @@
       margin-bottom: 25px;
       text-align: left;
     }
-    input {
+    input, textarea {
       width: 100%;
       padding: 12px 0;
       border: none;
@@ -59,6 +59,10 @@
       background: transparent;
       color: white;
       font-size: 1rem;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 80px;
     }
     button {
       background: white;
@@ -94,6 +98,15 @@
       border-radius: 8px;
       margin-top: 20px;
     }
+    #debug-message {
+      display: none;
+      color: #66ff66;
+      padding: 20px;
+      background: rgba(0,0,0,0.7);
+      border-radius: 8px;
+      margin-top: 20px;
+      font-family: monospace;
+    }
   </style>
 </head>
 <body>
@@ -115,25 +128,39 @@
       <p>You're on the right track! Just one step away from bringing your vision to life.</p>
       <p><strong>Let's do this!</strong></p>
       
-      <!-- FormSubmit Form with Auto-Reply -->
+      <!-- Optimized FormSubmit Form -->
       <form id="project-form" action="https://formsubmit.co/w.chandler.manuel@gmail.com" method="POST">
+        <!-- Required Fields -->
         <input type="hidden" name="_subject" value="New Project Inquiry - Chandler Manuel">
-        <input type="hidden" name="_captcha" value="false">
         <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_autoresponse" value="Hi %name%, thank you for contacting Chandler Manuel Design Studio! We've received your project inquiry and will respond within 24 hours.">
         
+        <!-- Auto-Reply Configuration -->
+        <input type="hidden" name="_autoresponse" value="Hi %name%, thank you for contacting Chandler Manuel Design Studio! We've received your request and will respond within 24 hours. Here's what you submitted:%0D%0A%0D%0AName: %name%%0D%0AEmail: %email%%0D%0AProject: %project%">
+        <input type="hidden" name="_cc" value="w.chandler.manuel@gmail.com">
+        <input type="hidden" name="_replyto" value="%email%">
+        
+        <!-- Debugging Tools -->
+        <input type="hidden" name="_debug" value="1">
+        <input type="hidden" name="_blacklist" value="spamtriggerword, badword">
+        
+        <!-- User Input Fields -->
         <div class="input-group">
-          <input type="text" name="name" placeholder="Your Name" required>
+          <input type="text" name="name" placeholder="Your Full Name" required>
         </div>
         <div class="input-group">
-          <input type="email" name="email" placeholder="Your Email" required>
+          <input type="email" name="email" placeholder="Your Best Email" required>
         </div>
+        <div class="input-group">
+          <textarea name="project" placeholder="Describe your project (goals, budget, timeline)" required></textarea>
+        </div>
+        
         <button type="submit" id="submit-btn">SUBMIT PROJECT REQUEST</button>
       </form>
       
       <div id="success-message">
         <h2>Thank You!</h2>
-        <p>We've received your submission and sent a confirmation to your email.</p>
+        <p>We've received your submission. Check your email for confirmation.</p>
+        <p><small>(If you don't see it within 5 minutes, please check your spam folder)</small></p>
       </div>
       
       <div id="error-message">
@@ -141,6 +168,8 @@
         <p>There was an error sending your information.</p>
         <p>Please try again or contact us directly at w.chandler.manuel@gmail.com</p>
       </div>
+      
+      <div id="debug-message"></div>
       
       <p class="disclaimer">We respect your privacy. Your information will never be shared.</p>
     </div>
@@ -153,32 +182,54 @@
       document.getElementById('form-container').style.display = 'block';
     });
 
-    // Handle form submission
+    // Enhanced form submission handler
     document.getElementById('project-form').addEventListener('submit', async function(e) {
       e.preventDefault();
       
       const btn = document.getElementById('submit-btn');
+      const form = e.target;
+      const debugEl = document.getElementById('debug-message');
+      
       btn.disabled = true;
       btn.textContent = 'SENDING...';
+      debugEl.style.display = 'none';
       
       try {
-        const response = await fetch(e.target.action, {
+        const formData = new FormData(form);
+        const response = await fetch(form.action, {
           method: 'POST',
-          body: new FormData(e.target),
+          body: formData,
           headers: {
             'Accept': 'application/json'
           }
         });
         
+        const data = await response.json();
+        
         if (response.ok) {
           document.getElementById('project-form').style.display = 'none';
           document.getElementById('success-message').style.display = 'block';
+          
+          // Debug output
+          debugEl.innerHTML = `
+            <h3>Submission Successful</h3>
+            <p>Status: ${response.status}</p>
+            <p>Auto-reply sent to: ${formData.get('email')}</p>
+          `;
         } else {
-          throw new Error('Form submission failed');
+          throw new Error(data.message || 'Form submission failed');
         }
       } catch (error) {
         console.error('Error:', error);
         document.getElementById('error-message').style.display = 'block';
+        
+        // Debug output
+        debugEl.innerHTML = `
+          <h3>Debug Info</h3>
+          <p>Error: ${error.message}</p>
+          <p>Check console for details</p>
+        `;
+        debugEl.style.display = 'block';
       } finally {
         btn.disabled = false;
         btn.textContent = 'SUBMIT PROJECT REQUEST';
