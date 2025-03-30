@@ -5,11 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chandler Manuel | Design Studio</title>
   <!-- Load EmailJS SDK -->
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-  <script type="text/javascript">
-    (function() {
-      emailjs.init('YOUR_EMAILJS_USER_ID'); // Initialize with your User ID
-    })();
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script>
+    // Initialize EmailJS with your API key
+    emailjs.init('wZhiGoCmnb1nKPB9E');
   </script>
   <style>
     /* MAIN STRUCTURE */
@@ -171,15 +170,15 @@
       </form>
       
       <div id="success-message">
-        <h2>Thank You!</h2>
+        <h2>Thank You, <span id="success-name"></span>!</h2>
         <p>We've sent a confirmation email with next steps.</p>
-        <p>Please check your inbox (and spam folder) for our message.</p>
+        <p>Please check your inbox (and spam folder).</p>
       </div>
       
       <div id="error-message">
         <h2>Oops!</h2>
         <p>There was an error sending your information.</p>
-        <p>Please try again or contact us directly at w.chandler.manuel@gmail.com</p>
+        <p>Please contact us directly at w.chandler.manuel@gmail.com</p>
       </div>
       
       <p class="disclaimer">We respect your privacy. Your information will never be shared.</p>
@@ -205,35 +204,20 @@
       const email = document.getElementById('email').value;
       
       try {
-        // 1. Send data to your email (using FormSubmit)
-        await fetch('https://formsubmit.co/ajax/w.chandler.manuel@gmail.com', {
-          method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify({
-            name: name,
-            email: email,
-            _subject: 'New Project Inquiry - ' + name,
-            _template: 'box'
-          })
-        });
-        
-        // 2. Send confirmation to user (using EmailJS with your service_e655cq7)
-        await emailjs.send('service_e655cq7', 'YOUR_TEMPLATE_ID', {
+        // Send personalized email to user
+        await emailjs.send('service_e655cq7', 'template_tumomcd', {
           to_name: name,
           to_email: email,
           from_name: 'Chandler Manuel',
-          message: `Thank you for your inquiry! Let's discuss your project on UpWork or schedule a Zoom call at your convenience.`,
           reply_to: 'w.chandler.manuel@gmail.com'
         });
-        
-        // Show success
+
+        // Show personalized success message
+        document.getElementById('success-name').textContent = name;
         document.getElementById('project-form').style.display = 'none';
         document.getElementById('success-message').style.display = 'block';
       } catch (error) {
-        console.error('Error:', error);
+        console.error('Failed to send:', error);
         document.getElementById('error-message').style.display = 'block';
       } finally {
         submitBtn.disabled = false;
