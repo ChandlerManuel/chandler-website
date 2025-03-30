@@ -4,6 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chandler Manuel | Design Studio</title>
+  <!-- Load EmailJS SDK -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script type="text/javascript">
+    (function() {
+      emailjs.init('YOUR_EMAILJS_USER_ID'); // Initialize with your User ID
+    })();
+  </script>
   <style>
     /* MAIN STRUCTURE */
     body {
@@ -119,6 +126,15 @@
       border-radius: 8px;
       margin-top: 20px;
     }
+
+    #error-message {
+      display: none;
+      color: #ff6b6b;
+      padding: 20px;
+      background: rgba(0,0,0,0.7);
+      border-radius: 8px;
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
@@ -144,42 +160,26 @@
       <p><strong>Let's do this!</strong></p>
       
       <form id="project-form">
-        <!-- FormSubmit Configuration -->
-        <input type="hidden" name="_subject" value="New Project Inquiry from Chandler Manuel's Website">
-        <input type="hidden" name="_template" value="box">
-        <input type="hidden" name="_next" value="#success">
-        <input type="hidden" name="_autoresponse" value="Thank you for reaching out to Chandler Manuel!
-
-We're excited to work with you on your project! Here's what you submitted:
-Name: %name%
-Email: %email%
-
-Next Steps:
-1. We can continue our discussion on UpWork where we can formalize our collaboration
-2. Let's schedule a Zoom meeting at your earliest convenience to discuss your vision in detail
-
-Please reply to this email with your availability for a Zoom call, or contact me directly on UpWork.
-
-Looking forward to creating something amazing together!
-
-Best regards,
-Chandler Manuel
-w.chandler.manuel@gmail.com">
-        
         <!-- User Fields -->
         <div class="input-group">
-          <input type="text" name="name" placeholder="Name" required>
+          <input type="text" name="name" id="name" placeholder="Name" required>
         </div>
         <div class="input-group">
-          <input type="email" name="email" placeholder="Email" required>
+          <input type="email" name="email" id="email" placeholder="Email" required>
         </div>
-        <button type="submit">Done!</button>
+        <button type="submit" id="submit-btn">Done!</button>
       </form>
       
       <div id="success-message">
         <h2>Thank You!</h2>
         <p>We've sent a confirmation email with next steps.</p>
         <p>Please check your inbox (and spam folder) for our message.</p>
+      </div>
+      
+      <div id="error-message">
+        <h2>Oops!</h2>
+        <p>There was an error sending your information.</p>
+        <p>Please try again or contact us directly at w.chandler.manuel@gmail.com</p>
       </div>
       
       <p class="disclaimer">We respect your privacy. Your information will never be shared.</p>
@@ -194,32 +194,51 @@ w.chandler.manuel@gmail.com">
     });
 
     // Handle form submission
-    document.getElementById('project-form').addEventListener('submit', function(e) {
+    document.getElementById('project-form').addEventListener('submit', async function(e) {
       e.preventDefault();
       
-      // Get form data
-      const form = e.target;
-      const formData = new FormData(form);
+      const submitBtn = document.getElementById('submit-btn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
       
-      // Send to FormSubmit
-      fetch('https://formsubmit.co/ajax/w.chandler.manuel@gmail.com', {
-        method: 'POST',
-        body: formData
-      })
-      .then(response => response.json())
-      .then(data => {
-        // Show success message
-        form.style.display = 'none';
-        document.getElementById('success-message').style.display = 'block';
-        
-        // Optional: Scroll to success message
-        document.getElementById('success-message').scrollIntoView({
-          behavior: 'smooth'
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      
+      try {
+        // 1. Send data to your email (using FormSubmit)
+        await fetch('https://formsubmit.co/ajax/w.chandler.manuel@gmail.com', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            name: name,
+            email: email,
+            _subject: 'New Project Inquiry - ' + name,
+            _template: 'box'
+          })
         });
-      })
-      .catch(error => {
-        alert('Error submitting form. Please try again later.');
-      });
+        
+        // 2. Send confirmation to user (using EmailJS with your service_e655cq7)
+        await emailjs.send('service_e655cq7', 'YOUR_TEMPLATE_ID', {
+          to_name: name,
+          to_email: email,
+          from_name: 'Chandler Manuel',
+          message: `Thank you for your inquiry! Let's discuss your project on UpWork or schedule a Zoom call at your convenience.`,
+          reply_to: 'w.chandler.manuel@gmail.com'
+        });
+        
+        // Show success
+        document.getElementById('project-form').style.display = 'none';
+        document.getElementById('success-message').style.display = 'block';
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('error-message').style.display = 'block';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Done!';
+      }
     });
   </script>
 </body>
