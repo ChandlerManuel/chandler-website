@@ -29,10 +29,10 @@
       filter: brightness(0) invert(1);
     }
 
-    /* TYPOGRAPHY - FINAL VERSION */
+    /* TYPOGRAPHY */
     h1 {
-      font-size: 1.8rem; /* Smaller size */
-      font-weight: 400;  /* Normal weight (not bold) */
+      font-size: 1.8rem;
+      font-weight: 400;
       letter-spacing: 0.5px;
       margin: 20px 0;
       color: white;
@@ -40,8 +40,8 @@
     }
 
     h2 {
-      font-size: 2.8rem; /* Larger size */
-      font-weight: 700;  /* Bold weight */
+      font-size: 2.8rem;
+      font-weight: 700;
       margin-bottom: 30px;
       line-height: 1.4;
       color: white;
@@ -98,6 +98,7 @@
       background: #f0f0f0;
     }
 
+    /* VISUAL DETAILS */
     .divider {
       height: 1px;
       width: 100px;
@@ -109,6 +110,15 @@
       color: rgba(255,255,255,0.7);
       font-size: 0.9rem;
     }
+
+    #success-message {
+      display: none;
+      color: white;
+      padding: 20px;
+      background: rgba(0,0,0,0.7);
+      border-radius: 8px;
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
@@ -118,8 +128,8 @@
 
     <!-- Landing Content -->
     <div id="landing">
-      <h1>CHANDLER MANUEL</h1> <!-- Smaller and NOT bold -->
-      <h2>YOUR DREAM PROJECT<br>STARTS HERE!</h2> <!-- Larger and BOLD -->
+      <h1>CHANDLER MANUEL</h1>
+      <h2>YOUR DREAM PROJECT<br>STARTS HERE!</h2>
       <p>I help you turn ideas into stunning designs.</p>
       <p>Let's build something incredible together!</p>
       <div class="divider"></div>
@@ -128,12 +138,35 @@
 
     <!-- Form Content -->
     <div id="form-container" class="form-container">
-      <h1>CHANDLER MANUEL</h1> <!-- Smaller and NOT bold -->
-      <h2>YOUR DREAM PROJECT STARTS HERE!</h2> <!-- Larger and BOLD -->
+      <h1>CHANDLER MANUEL</h1>
+      <h2>YOUR DREAM PROJECT STARTS HERE!</h2>
       <p>You're on the right track! Just one step away from bringing your vision to life.</p>
       <p><strong>Let's do this!</strong></p>
       
-      <form action="https://formsubmit.co/w.chandler.manuel@gmail.com" method="POST">
+      <form id="project-form">
+        <!-- FormSubmit Configuration -->
+        <input type="hidden" name="_subject" value="New Project Inquiry from Chandler Manuel's Website">
+        <input type="hidden" name="_template" value="box">
+        <input type="hidden" name="_next" value="#success">
+        <input type="hidden" name="_autoresponse" value="Thank you for reaching out to Chandler Manuel!
+
+We're excited to work with you on your project! Here's what you submitted:
+Name: %name%
+Email: %email%
+
+Next Steps:
+1. We can continue our discussion on UpWork where we can formalize our collaboration
+2. Let's schedule a Zoom meeting at your earliest convenience to discuss your vision in detail
+
+Please reply to this email with your availability for a Zoom call, or contact me directly on UpWork.
+
+Looking forward to creating something amazing together!
+
+Best regards,
+Chandler Manuel
+w.chandler.manuel@gmail.com">
+        
+        <!-- User Fields -->
         <div class="input-group">
           <input type="text" name="name" placeholder="Name" required>
         </div>
@@ -143,14 +176,50 @@
         <button type="submit">Done!</button>
       </form>
       
+      <div id="success-message">
+        <h2>Thank You!</h2>
+        <p>We've sent a confirmation email with next steps.</p>
+        <p>Please check your inbox (and spam folder) for our message.</p>
+      </div>
+      
       <p class="disclaimer">We respect your privacy. Your information will never be shared.</p>
     </div>
   </div>
 
   <script>
+    // Show form when button clicked
     document.getElementById('cta-button').addEventListener('click', function() {
       document.getElementById('landing').style.display = 'none';
       document.getElementById('form-container').style.display = 'block';
+    });
+
+    // Handle form submission
+    document.getElementById('project-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Get form data
+      const form = e.target;
+      const formData = new FormData(form);
+      
+      // Send to FormSubmit
+      fetch('https://formsubmit.co/ajax/w.chandler.manuel@gmail.com', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Show success message
+        form.style.display = 'none';
+        document.getElementById('success-message').style.display = 'block';
+        
+        // Optional: Scroll to success message
+        document.getElementById('success-message').scrollIntoView({
+          behavior: 'smooth'
+        });
+      })
+      .catch(error => {
+        alert('Error submitting form. Please try again later.');
+      });
     });
   </script>
 </body>
