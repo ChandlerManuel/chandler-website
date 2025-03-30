@@ -5,30 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chandler Manuel | Design Studio</title>
   <style>
-    /* [Your existing CSS remains unchanged] */
+    /* [Your existing CSS remains exactly the same] */
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- [Your existing HTML structure remains unchanged until the form] -->
+    <!-- [Keep all your existing HTML structure] -->
 
     <div id="form-container" class="form-container">
-      <!-- SUPERCHARGED FORMSUBMIT FORM -->
-      <form id="project-form" action="https://formsubmit.co/ajax/w.chandler.manuel@gmail.com" method="POST">
-        <!-- Required Fields -->
-        <input type="hidden" name="_subject" value="New Project Inquiry - Chandler Manuel">
+      <!-- PROPERLY CONFIGURED FORM -->
+      <form id="project-form" action="https://formsubmit.co/w.chandler.manuel@gmail.com" method="POST">
+        <!-- Critical Auto-Reply Settings -->
+        <input type="hidden" name="_autoresponse" value="Hi %name%, we've received your request! We'll contact you within 24 hours.">
+        <input type="hidden" name="_replyto" value="%email%"> <!-- Links to email field -->
         <input type="hidden" name="_template" value="table">
         
-        <!-- Auto-Reply Configuration (MUST use 'email' field name) -->
-        <input type="hidden" name="_autoresponse" value="Hi %name%, this confirms we received your request! We'll contact you within 24 hours.%0D%0A%0D%0AFor reference:%0D%0AName: %name%%0D%0AEmail: %email%">
-        <input type="hidden" name="_replyto" value="%email%"> <!-- Ensures reply-to is set -->
-        <input type="hidden" name="_cc" value="w.chandler.manuel@gmail.com"> <!-- Copy sent to you -->
-        
-        <!-- Debugging Tools -->
-        <input type="hidden" name="_captcha" value="false"> <!-- Disable if testing -->
-        <input type="hidden" name="_blacklist" value="spamtrigger"> <!-- Filter spam -->
-        
-        <!-- User Input Fields -->
+        <!-- User Fields -->
         <div class="input-group">
           <input type="text" name="name" placeholder="Your Name" required>
         </div>
@@ -39,7 +31,7 @@
         <button type="submit" id="submit-btn">SUBMIT REQUEST</button>
       </form>
       
-      <!-- [Your existing success/error messages remain] -->
+      <!-- [Your existing success/error messages] -->
     </div>
   </div>
 
@@ -53,38 +45,30 @@
         btn.disabled = true;
         btn.textContent = 'SENDING...';
         
-        // Enhanced submission with error tracking
+        // Test if email field is properly captured
+        const userEmail = form.elements['email'].value;
+        console.log('Attempting to send confirmation to:', userEmail);
+        
         fetch(form.action, {
           method: 'POST',
           body: new FormData(form),
           headers: { 
-            'Accept': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest' // Required for FormSubmit API
+            'Accept': 'application/json'
           }
         })
-        .then(response => {
-          if (!response.ok) throw new Error('Server error');
-          return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
           if (data.success) {
+            console.log('FormSubmit confirmation sent to:', userEmail);
             document.getElementById('project-form').style.display = 'none';
             document.getElementById('success-message').style.display = 'block';
-            
-            // DEBUG: Log successful delivery
-            console.log('Auto-reply sent to:', data.email);
           } else {
             throw new Error(data.message || 'Delivery failed');
           }
         })
         .catch(error => {
-          console.error('Submission error:', error);
+          console.error('Error:', error);
           document.getElementById('error-message').style.display = 'block';
-          
-          // SPECIAL FALLBACK: If FormSubmit fails, use Mailto as backup
-          const name = encodeURIComponent(form.elements['name'].value);
-          const email = encodeURIComponent(form.elements['email'].value);
-          window.location.href = `mailto:w.chandler.manuel@gmail.com?subject=Project Inquiry&body=Name: ${name}%0AEmail: ${email}`;
         })
         .finally(() => {
           btn.disabled = false;
