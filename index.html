@@ -11,8 +11,10 @@
       margin: 0;
       padding: 0;
       background: 
-        linear-gradient(rgba(245, 245, 245, 0.9), rgba(245, 245, 245, 0.9)),
-        url('background.jpg') center/cover no-repeat fixed;
+        /* Light overlay (reduced opacity to 0.7 for better visibility) */
+        linear-gradient(rgba(245, 245, 245, 0.7), rgba(245, 245, 245, 0.7)),
+        /* Sample background image (replace with your own) */
+        url('background.png') center/cover no-repeat fixed;
       min-height: 100vh;
       color: #333;
     }
@@ -22,12 +24,6 @@
       margin: 0 auto;
       padding: 60px 30px;
       text-align: center;
-    }
-
-    /* LOGO STYLING */
-    .logo {
-      width: 120px; /* Adjust based on your logo */
-      margin-bottom: 40px;
     }
 
     /* TYPOGRAPHY */
@@ -95,9 +91,6 @@
 </head>
 <body>
   <div class="container">
-    <!-- Logo -->
-    <img src="logo.png" alt="Chandler Manuel Logo" class="logo">
-
     <!-- Landing Content -->
     <div id="landing">
       <h1>CHANDLER MANUEL</h1>
