@@ -5,65 +5,182 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chandler Manuel | Design Studio</title>
   <style>
-    /* [Your existing CSS remains exactly the same] */
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: url('background.png') center/cover no-repeat fixed;
+      min-height: 100vh;
+      color: white;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 60px 30px;
+      text-align: center;
+    }
+    .logo {
+      width: 180px;
+      margin-bottom: 30px;
+      filter: brightness(0) invert(1);
+    }
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 400;
+      letter-spacing: 0.5px;
+      margin: 20px 0;
+    }
+    h2 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      margin-bottom: 30px;
+      line-height: 1.4;
+    }
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 25px;
+    }
+    .form-container {
+      background: rgba(0,0,0,0.7);
+      padding: 50px;
+      border-radius: 8px;
+      display: none;
+    }
+    .input-group {
+      margin-bottom: 25px;
+      text-align: left;
+    }
+    input {
+      width: 100%;
+      padding: 12px 0;
+      border: none;
+      border-bottom: 1px solid white;
+      background: transparent;
+      color: white;
+      font-size: 1rem;
+    }
+    button {
+      background: white;
+      color: black;
+      border: none;
+      padding: 15px 40px;
+      font-size: 1rem;
+      margin: 20px 0;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    button:hover {
+      background: #f0f0f0;
+    }
+    .divider {
+      height: 1px;
+      width: 100px;
+      background: rgba(255,255,255,0.5);
+      margin: 40px auto;
+    }
+    #success-message {
+      display: none;
+      padding: 20px;
+      background: rgba(0,0,0,0.7);
+      border-radius: 8px;
+    }
+    #error-message {
+      display: none;
+      color: #ff6b6b;
+      padding: 20px;
+      background: rgba(0,0,0,0.7);
+      border-radius: 8px;
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- [Keep all your existing HTML structure] -->
+    <img src="logo.png" alt="Chandler Manuel Logo" class="logo">
+
+    <div id="landing">
+      <h1>CHANDLER MANUEL</h1>
+      <h2>YOUR DREAM PROJECT<br>STARTS HERE!</h2>
+      <p>I help you turn ideas into stunning designs.</p>
+      <p>Let's build something incredible together!</p>
+      <div class="divider"></div>
+      <button id="cta-button">CLICK HERE TO GET STARTED</button>
+    </div>
 
     <div id="form-container" class="form-container">
-      <!-- PROPERLY CONFIGURED FORM -->
+      <h1>CHANDLER MANUEL</h1>
+      <h2>YOUR DREAM PROJECT STARTS HERE!</h2>
+      <p>You're on the right track! Just one step away from bringing your vision to life.</p>
+      <p><strong>Let's do this!</strong></p>
+      
+      <!-- WORKING FORM WITH USER CONFIRMATIONS -->
       <form id="project-form" action="https://formsubmit.co/w.chandler.manuel@gmail.com" method="POST">
-        <!-- Critical Auto-Reply Settings -->
-        <input type="hidden" name="_autoresponse" value="Hi %name%, we've received your request! We'll contact you within 24 hours.">
-        <input type="hidden" name="_replyto" value="%email%"> <!-- Links to email field -->
-        <input type="hidden" name="_template" value="table">
+        <!-- Critical auto-reply settings -->
+        <input type="hidden" name="_autoresponse" value="Hi %name%, thank you for contacting Chandler Manuel! We've received your request and will respond within 24 hours.">
+        <input type="hidden" name="_replyto" value="%email%">
         
-        <!-- User Fields -->
+        <!-- User fields -->
         <div class="input-group">
           <input type="text" name="name" placeholder="Your Name" required>
         </div>
         <div class="input-group">
-          <input type="email" name="email" placeholder="Your Email" required> <!-- MUST be 'email' -->
+          <input type="email" name="email" placeholder="Your Email" required>
         </div>
         
         <button type="submit" id="submit-btn">SUBMIT REQUEST</button>
       </form>
       
-      <!-- [Your existing success/error messages] -->
+      <div id="success-message">
+        <h2>Thank You!</h2>
+        <p>We've received your submission. Check your email for confirmation.</p>
+      </div>
+      
+      <div id="error-message">
+        <h2>Oops!</h2>
+        <p>There was an error sending your information.</p>
+        <p>Please try again or contact us directly at w.chandler.manuel@gmail.com</p>
+      </div>
+      
+      <p class="disclaimer">We respect your privacy. Your information will never be shared.</p>
     </div>
   </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+      // Show form when button clicked
+      document.getElementById('cta-button').addEventListener('click', function() {
+        document.getElementById('landing').style.display = 'none';
+        document.getElementById('form-container').style.display = 'block';
+      });
+
+      // Form submission handler
       const form = document.getElementById('project-form');
-      
       form.addEventListener('submit', function(e) {
         e.preventDefault();
+        
         const btn = document.getElementById('submit-btn');
         btn.disabled = true;
         btn.textContent = 'SENDING...';
         
-        // Test if email field is properly captured
+        // Debug output
         const userEmail = form.elements['email'].value;
         console.log('Attempting to send confirmation to:', userEmail);
         
         fetch(form.action, {
           method: 'POST',
           body: new FormData(form),
-          headers: { 
-            'Accept': 'application/json'
-          }
+          headers: { 'Accept': 'application/json' }
         })
         .then(response => response.json())
         .then(data => {
           if (data.success) {
-            console.log('FormSubmit confirmation sent to:', userEmail);
+            console.log('Confirmation sent to:', userEmail);
             document.getElementById('project-form').style.display = 'none';
             document.getElementById('success-message').style.display = 'block';
           } else {
-            throw new Error(data.message || 'Delivery failed');
+            throw new Error(data.message || 'Failed to send confirmation');
           }
         })
         .catch(error => {
